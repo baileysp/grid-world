@@ -40,22 +40,63 @@ class Grid {
     ArrayList<Cell> successors = new ArrayList<Cell>();
     int row = cell.getRow();
     int col = cell.getCol();
-    if (row >= 0 && row < numCells - 1 && !grid[row + 1][col].isWall()) {
-      successors.add(grid[row + 1][col]);
+    if (row >  0){
+      if (col > 0){
+        //Top left diagonal
+        Cell topLeftDiag = grid[row - 1][col - 1];
+        if (!topLeftDiag.isWall()){
+          topLeftDiag.setDiagonal(true);
+          successors.add(topLeftDiag);
+        }
+      }
+      if (col < numCells - 1){
+        //Top right diagonal
+        Cell topRightDiag = grid[row - 1][col + 1];
+        if (!topRightDiag.isWall()){
+          topRightDiag.setDiagonal(true);
+          successors.add(topRightDiag);
+        }
+      }
+      if (!grid[row - 1][col].isWall()){
+        //Top center
+        successors.add(grid[row - 1][col]);
+      }
     }
-    if (row < numCells && row > 0 && !grid[row - 1][col].isWall()) {
-      successors.add(grid[row - 1][col]);
+    if (row < numCells - 1){
+      if (col > 0){
+        //Bottom left diagonal
+        Cell btmLeftDiag = grid[row + 1][col - 1];
+        if (!btmLeftDiag.isWall()){
+          btmLeftDiag.setDiagonal(true);
+          successors.add(btmLeftDiag);
+        }
+      }
+      if (col < numCells - 1){
+        //Bottom right diagonal
+        Cell btmRightDiag = grid[row + 1][col + 1];
+        if (!btmRightDiag.isWall()){
+          btmRightDiag.setDiagonal(true);
+          successors.add(btmRightDiag);
+        }
+      }
+      if (!grid[row + 1][col].isWall()){
+        //Bottom center
+        successors.add(grid[row + 1][col]);
+      }
+    }    
+    if (col > 0 ){
+      Cell centerLeft = grid[row][col - 1];
+      if (!centerLeft.isWall() && !successors.contains(centerLeft)){
+        successors.add(centerLeft);
+      }
     }
-    if (col >= 0 && col < numCells - 1 && !grid[row][col + 1].isWall()) {
-      successors.add(grid[row][col + 1]);
+    if (col < numCells - 1){
+      Cell centerRight = grid[row][col + 1];
+      if (!centerRight.isWall() && !successors.contains(centerRight)){
+        successors.add(centerRight);
+      }
     }
-    if (col < numCells && col > 0 && !grid[row][col - 1].isWall()) {
-      successors.add(grid[row][col - 1]);
-    }
-    //System.out.println("row: " + cell.getRow() + ", col: " + cell.getCol() + "| " + successors.size());
-    // System.out.println(successors.size());
     return successors;
-
   }
 
   public void cycleGoal(int row, int col) {

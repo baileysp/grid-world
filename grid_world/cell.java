@@ -11,12 +11,14 @@ class Cell implements Comparable<Cell> {
   private double hCost; // heuristic cost
   private double fCost; // gCost + hCost
   private Cell previous;
+  private boolean diagonal;
 
   public Cell(int row, int col) {
     this.row = row;
     this.col = col;
     status = Status.INACTIVE;
     lastClicked = 0;
+    previous = this;
   }
 
   public int getRow() {
@@ -41,7 +43,7 @@ class Cell implements Comparable<Cell> {
 
   public void setgCost(double gCost) {
     this.gCost = gCost;
-    fCost = this.gCost + hCost;
+    fCost = (this.gCost + hCost);
   }
 
   public double gethCost() {
@@ -50,7 +52,7 @@ class Cell implements Comparable<Cell> {
 
   public void sethCost(double hCost) {
     this.hCost = hCost;
-    fCost = gCost + this.hCost;
+    fCost = (gCost + this.hCost);
   }
 
   public double getfCost() {
@@ -59,6 +61,14 @@ class Cell implements Comparable<Cell> {
 
   public void setfCost(double fCost) {
     this.fCost = fCost;
+  }
+
+  public boolean isDiagonal() {
+    return diagonal;
+  }
+
+  public void setDiagonal(boolean diagonal) {
+    this.diagonal = diagonal;
   }
 
   public boolean isStart() {
@@ -189,12 +199,14 @@ class Cell implements Comparable<Cell> {
   }
 
   public int compareTo(Cell cell) {
-    return (int) (100 * (fCost - cell.fCost));
+    return (int) (1000 * (fCost - cell.fCost));
+    //return (int) ((cell.fCost - fCost));
   }
 
   @Override
   public String toString() {
-    return row + ", " + col + "\nCost from start: " + gCost + "\nCost to goal: " + hCost + "\nTotal Cost: " + fCost + "\n";
+    
+    return row + ", " + col + "\nCost from start: " + gCost + "\nCost to goal: " + hCost + "\nTotal Cost: " + fCost + "\nPrevious Cell: " + previous.getRow() + ", " + previous.getCol() + "\n";
   }
 
   @Override
